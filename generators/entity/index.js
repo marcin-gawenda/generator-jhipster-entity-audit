@@ -9,11 +9,12 @@ module.exports = class extends BaseGenerator {
   get initializing() {
     return {
       readConfig() {
-        this.entityConfig = this.options.entityConfig;
-        this.jhAppConfig = this.getJhipsterAppConfig();
+        this.jhAppConfig = this.getAllJhipsterConfig();
+        // this.jhAppConfig = this.getJhipsterAppConfig();
         if (!this.jhAppConfig) {
           this.error('Can\'t read .yo-rc.json');
         }
+        this.entityConfig = this.options.entityConfig;
       },
       setSource() {
         this.sourceRoot(`${this.sourceRoot()}/../../app/templates`);
@@ -53,8 +54,11 @@ module.exports = class extends BaseGenerator {
     }
 
     // don't prompt if data are imported from a file
-    if (this.entityConfig.useConfigurationFile === true && this.entityConfig.data && typeof this.entityConfig.data.enableEntityAudit !== 'undefined') {
-      this.enableAudit = this.entityConfig.data.enableEntityAudit;
+    // jhipster import-jdl does not preserve/support custom properties like enableEntityAudit, so alway prompting, thus hacking here
+    // if (this.entityConfig.useConfigurationFile === true && this.entityConfig.data && typeof this.entityConfig.data.enableEntityAudit !== 'undefined') {
+    if (this.entityConfig.useConfigurationFile === true && this.entityConfig.data && true) {
+      this.enableAudit = true;
+      // this.enableAudit = this.entityConfig.data.enableEntityAudit;
 
       if (typeof this.config.get('auditFramework') !== 'undefined') {
         this.auditFramework = this.config.get('auditFramework');
